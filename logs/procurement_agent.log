@@ -1,0 +1,83 @@
+2026-04-14 12:32:41,358 - main - INFO - ============================================================
+2026-04-14 12:32:41,359 - main - INFO - Initializing Autonomous Procurement Agent System
+2026-04-14 12:32:41,359 - main - INFO - ============================================================
+2026-04-14 12:32:41,390 - database.db - INFO - Database initialized at C:\Users\ASUS\OneDrive\Documents\mini pro\procurement_ai_agent\data\vendors.db
+2026-04-14 12:32:41,555 - main - INFO - Adding vendor: TechHaven Inc
+2026-04-14 12:32:41,563 - database.db - INFO - Vendor added: TechHaven Inc
+2026-04-14 12:32:41,563 - main - INFO - Adding vendor: Global Supplies Ltd
+2026-04-14 12:32:41,571 - database.db - INFO - Vendor added: Global Supplies Ltd
+2026-04-14 12:32:41,572 - main - INFO - Adding vendor: Component Plus
+2026-04-14 12:32:41,580 - database.db - INFO - Vendor added: Component Plus
+2026-04-14 12:32:41,580 - main - INFO - Adding vendor: Premier Packaging
+2026-04-14 12:32:41,587 - database.db - INFO - Vendor added: Premier Packaging
+2026-04-14 12:32:42,598 - main - INFO - ============================================================
+2026-04-14 12:32:42,598 - main - INFO - Initializing Autonomous Procurement Agent System
+2026-04-14 12:32:42,599 - main - INFO - ============================================================
+2026-04-14 12:32:42,601 - database.db - INFO - Database initialized at C:\Users\ASUS\OneDrive\Documents\mini pro\procurement_ai_agent\data\vendors.db
+2026-04-14 12:32:42,611 - main - INFO - Procurement request received: Microcontrollers
+2026-04-14 12:32:42,611 - agents.extraction_agent - INFO - Processing procurement request: Microcontrollers, qty: 100
+2026-04-14 12:32:42,617 - database.db - INFO - RFQ created: 1 for Microcontrollers
+2026-04-14 12:32:42,618 - agents.extraction_agent - INFO - RFQ 1 created for Microcontrollers (qty: 125)
+2026-04-14 12:32:42,621 - agents.extraction_agent - INFO - Found 0 suitable vendors
+2026-04-14 12:32:42,622 - main - INFO - Procurement request received: Office Paper
+2026-04-14 12:32:42,622 - agents.extraction_agent - INFO - Processing procurement request: Office Paper, qty: 50
+2026-04-14 12:32:42,627 - database.db - INFO - RFQ created: 2 for Office Paper
+2026-04-14 12:32:42,627 - agents.extraction_agent - INFO - RFQ 2 created for Office Paper (qty: 65)
+2026-04-14 12:32:42,630 - agents.extraction_agent - INFO - Found 0 suitable vendors
+2026-04-14 12:32:42,630 - main - INFO - Procurement request received: Packaging Materials
+2026-04-14 12:32:42,630 - agents.extraction_agent - INFO - Processing procurement request: Packaging Materials, qty: 200
+2026-04-14 12:32:42,635 - database.db - INFO - RFQ created: 3 for Packaging Materials
+2026-04-14 12:32:42,635 - agents.extraction_agent - INFO - RFQ 3 created for Packaging Materials (qty: 245)
+2026-04-14 12:32:42,637 - agents.extraction_agent - INFO - Found 0 suitable vendors
+2026-04-14 12:32:43,639 - main - INFO - Handling quotation from sales@techhaven.com for RFQ 1
+2026-04-14 12:32:43,641 - main - INFO - Handling quotation from contact@componentplus.com for RFQ 1
+2026-04-14 12:32:43,642 - main - INFO - Handling quotation from sales@techhaven.com for RFQ 1
+2026-04-14 12:32:44,652 - main - INFO - Manual decision trigger for RFQ 1
+2026-04-14 12:32:44,652 - agents.decision_agent - INFO - Evaluating quotations for RFQ 1
+2026-04-14 12:32:44,654 - agents.decision_agent - WARNING - No quotations found for RFQ 1
+2026-04-14 12:35:37,904 - main - INFO - ============================================================
+2026-04-14 12:35:37,904 - main - INFO - Initializing Autonomous Procurement Agent System
+2026-04-14 12:35:37,904 - main - INFO - ============================================================
+2026-04-14 12:35:37,906 - database.db - INFO - Database initialized at C:\Users\ASUS\OneDrive\Documents\mini pro\procurement_ai_agent\data\vendors.db
+2026-04-14 12:35:37,906 - main - INFO - [OK] Database initialized
+2026-04-14 12:35:37,906 - main - INFO - [OK] Email Agent initialized
+2026-04-14 12:35:37,906 - main - INFO - [OK] Extraction Agent initialized
+2026-04-14 12:35:37,907 - main - INFO - [OK] Order Agent initialized
+2026-04-14 12:35:37,907 - main - INFO - [OK] Decision Agent initialized
+2026-04-14 12:35:37,907 - main - INFO - [OK] Follow-up Agent initialized
+2026-04-14 12:35:37,907 - main - INFO - Adding vendor: TechHaven Inc
+2026-04-14 12:35:37,908 - database.db - WARNING - Vendor TechHaven Inc already exists
+2026-04-14 12:35:37,909 - main - INFO - Adding vendor: Global Supplies Ltd
+2026-04-14 12:38:08,949 - main - INFO - ============================================================
+2026-04-14 12:38:08,950 - main - INFO - Initializing Autonomous Procurement Agent System
+2026-04-14 12:38:08,950 - main - INFO - ============================================================
+2026-04-14 12:38:08,953 - database.db - INFO - Database initialized at C:\Users\ASUS\OneDrive\Documents\mini pro\procurement_ai_agent\data\vendors.db
+2026-04-14 12:38:08,953 - main - INFO - [OK] Database initialized
+2026-04-14 12:38:08,954 - main - INFO - [OK] Email Agent initialized
+2026-04-14 12:38:08,954 - main - INFO - [OK] Extraction Agent initialized
+2026-04-14 12:38:08,955 - main - INFO - [OK] Order Agent initialized
+2026-04-14 12:38:08,955 - main - INFO - [OK] Decision Agent initialized
+2026-04-14 12:38:08,955 - main - INFO - [OK] Follow-up Agent initialized
+2026-04-14 12:38:08,956 - main - INFO - Adding vendor: TechHaven Inc
+2026-04-14 12:38:08,958 - database.db - WARNING - Vendor TechHaven Inc already exists
+2026-04-14 12:38:08,959 - main - INFO - Adding vendor: Global Supplies Ltd
+2026-04-14 12:41:54,110 - main - INFO - ============================================================
+2026-04-14 12:41:54,112 - main - INFO - Initializing Autonomous Procurement Agent System
+2026-04-14 12:41:54,112 - main - INFO - ============================================================
+2026-04-14 12:41:54,114 - database.db - INFO - Database initialized at C:\Users\ASUS\OneDrive\Documents\mini pro\procurement_ai_agent\data\vendors.db
+2026-04-14 12:41:54,115 - main - INFO - [OK] Database initialized
+2026-04-14 12:41:54,116 - main - INFO - [OK] Email Agent initialized
+2026-04-14 12:41:54,116 - main - INFO - [OK] Extraction Agent initialized
+2026-04-14 12:41:54,117 - main - INFO - [OK] Order Agent initialized
+2026-04-14 12:41:54,117 - main - INFO - [OK] Decision Agent initialized
+2026-04-14 12:41:54,118 - main - INFO - [OK] Follow-up Agent initialized
+2026-04-14 21:58:37,982 - main - INFO - ============================================================
+2026-04-14 21:58:37,983 - main - INFO - Initializing Autonomous Procurement Agent System
+2026-04-14 21:58:37,985 - main - INFO - ============================================================
+2026-04-14 21:58:37,996 - database.db - INFO - Database initialized at C:\Users\ASUS\OneDrive\Documents\mini pro\procurement_ai_agent\data\vendors.db
+2026-04-14 21:58:37,996 - main - INFO - [OK] Database initialized
+2026-04-14 21:58:37,997 - main - INFO - [OK] Email Agent initialized
+2026-04-14 21:58:37,998 - main - INFO - [OK] Extraction Agent initialized
+2026-04-14 21:58:37,998 - main - INFO - [OK] Order Agent initialized
+2026-04-14 21:58:37,999 - main - INFO - [OK] Decision Agent initialized
+2026-04-14 21:58:37,999 - main - INFO - [OK] Follow-up Agent initialized
