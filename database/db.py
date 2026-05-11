@@ -201,6 +201,22 @@ class ProcurementDB:
         quote_id = cursor.lastrowid
         conn.close()
         return quote_id
+
+    def mark_quotation_selected(self, quote_id: int):
+        """Mark a quotation as selected and clear others for the same RFQ."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+
+        # Get RFQ for this quote
+        cursor.execute("SELECT rfq_id FROM quotations WHERE quote_id = ?", (quote_id,))
+        result = cursor.fetchone()
+        if result:
+            rfq_id = result[0]
+            cursor.execute("UPDATE quotations SET selected = 0 WHERE rfq_id = ?", (rfq_id,))
+            cursor.execute("UPDATE quotations SET selected = 1 WHERE quote_id = ?", (quote_id,))
+            conn.commit()
+
+        conn.close()
     
     def get_rfq_quotations(self, rfq_id: int) -> List[Dict]:
         """Get all quotations for an RFQ."""
@@ -217,6 +233,19 @@ class ProcurementDB:
         quotations = [dict(row) for row in cursor.fetchall()]
         conn.close()
         return quotations
+    
+    def get_all_rfqs(self) -> List[Dict]:
+        """Get all RFQs from the database."""
+        conn = sqlite3.connect(self.db_path)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT * FROM rfqs 
+            ORDER BY created_at DESC
+        """)
+        rfqs = [dict(row) for row in cursor.fetchall()]
+        conn.close()
+        return rfqs
     
     def create_purchase_order(self, vendor_id: int, item_name: str,
                              quantity: int, unit_price: float,

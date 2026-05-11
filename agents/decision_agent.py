@@ -71,6 +71,10 @@ class DecisionAgent:
                     'best_score': best_quotation['score']
                 }
             
+            # Persist selected quotation in the database
+            if hasattr(self.db, 'mark_quotation_selected'):
+                self.db.mark_quotation_selected(best_quotation['quote_id'])
+
             # Store decision
             self.decision_history[rfq_id] = {
                 'decision_time': datetime.now(),
