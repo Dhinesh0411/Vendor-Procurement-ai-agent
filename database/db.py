@@ -68,6 +68,7 @@ class ProcurementDB:
                 rfq_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 item_name TEXT NOT NULL,
                 quantity INTEGER NOT NULL,
+                requested_quantity INTEGER,
                 specifications TEXT,
                 deadline TIMESTAMP,
                 status TEXT DEFAULT 'open',
@@ -75,6 +76,12 @@ class ProcurementDB:
                 responses_count INTEGER DEFAULT 0
             )
         """)
+
+        # Ensure requested_quantity column exists for legacy databases
+        cursor.execute("PRAGMA table_info(rfqs)")
+        rfq_columns = [row[1] for row in cursor.fetchall()]
+        if 'requested_quantity' not in rfq_columns:
+            cursor.execute("ALTER TABLE rfqs ADD COLUMN requested_quantity INTEGER")
         
         # Vendor Quotations table
         cursor.execute("""
@@ -166,14 +173,18 @@ class ProcurementDB:
         return vendors
     
     def create_rfq(self, item_name: str, quantity: int, 
-                   specifications: str, deadline: datetime) -> int:
+                   specifications: str, deadline: datetime,
+                   requested_quantity: Optional[int] = None) -> int:
         """Create a new RFQ."""
+        if requested_quantity is None:
+            requested_quantity = quantity
+
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         cursor.execute("""
-            INSERT INTO rfqs (item_name, quantity, specifications, deadline)
-            VALUES (?, ?, ?, ?)
-        """, (item_name, quantity, specifications, deadline))
+            INSERT INTO rfqs (item_name, quantity, requested_quantity, specifications, deadline)
+            VALUES (?, ?, ?, ?, ?)
+        """, (item_name, quantity, requested_quantity, specifications, deadline))
         conn.commit()
         rfq_id = cursor.lastrowid
         conn.close()

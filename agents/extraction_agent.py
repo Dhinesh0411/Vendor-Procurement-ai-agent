@@ -70,6 +70,7 @@ class ExtractionAgent:
             rfq_id = self.db.create_rfq(
                 item_name=item_name,
                 quantity=order_quantity,
+                requested_quantity=quantity,
                 specifications=specifications,
                 deadline=deadline
             )

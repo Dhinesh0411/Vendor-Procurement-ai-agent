@@ -129,22 +129,32 @@ def main():
             else:
                 st.error("Item name is required.")
 
-    with st.sidebar.expander("Quick RFQ: 100 Computers", expanded=False):
-        st.markdown("**Create a fast test request for 100 computers across all vendors.**")
-        if st.button("Create 100-Computer RFQ"):
-            demo_request = {
-                "item_name": "Computer",
-                "quantity": 100,
-                "specifications": "Requesting 100 office desktop computers with standard warranty and shipping.",
-                "priority": "normal",
-                "budget": 100000.0
-            }
-            result = run_async(system.submit_procurement_request(demo_request))
-            if result.get("status") == "rfq_created":
-                st.success(f"✅ RFQ #{result['rfq_id']} created for 100 computers.")
-                st.info(f"📧 Sent request to {result['vendors_contacted']} vendors.")
+    with st.sidebar.expander("Send Tender to All Vendors", expanded=False):
+        st.markdown("**Create a tender for any item and send it to vendors.**")
+
+        tender_item = st.text_input("Item Name", key="tender_item", value="Computer")
+        tender_quantity = st.number_input("Quantity", min_value=1, value=10, step=1, key="tender_quantity")
+        tender_specifications = st.text_area("Specifications", key="tender_specifications", value="Please provide specifications for the requested item.")
+        tender_priority = st.selectbox("Priority", ["normal", "high", "urgent", "low"], key="tender_priority")
+        tender_budget = st.number_input("Budget", min_value=0.0, value=0.0, format="%.2f", key="tender_budget")
+
+        if st.button("Send Tender to Vendors", key="send_tender"):
+            if tender_item:
+                tender_request = {
+                    "item_name": tender_item,
+                    "quantity": int(tender_quantity),
+                    "specifications": tender_specifications,
+                    "priority": tender_priority,
+                    "budget": float(tender_budget)
+                }
+                result = run_async(system.submit_procurement_request(tender_request))
+                if result.get("status") == "rfq_created":
+                    st.success(f"✅ RFQ #{result['rfq_id']} created for {tender_item}.")
+                    st.info(f"📧 Sent request to {result['vendors_contacted']} vendors.")
+                else:
+                    st.error(f"Failed to create RFQ: {result.get('message', result)}")
             else:
-                st.error(f"Failed to create RFQ: {result.get('message', result)}")
+                st.error("Item name is required.")
 
     # Add Demo Tender Section
     with st.sidebar.expander("🚀 Demo: Send Tender to Vendors", expanded=False):
@@ -233,11 +243,26 @@ def main():
         if rfqs:
             st.subheader("Current Active Tenders")
 
-            # Show chosen vendor summary for all active RFQs
+            # Show active RFQ summary for all active RFQs
+            rfq_summary = []
             chosen_summary = []
             for rfq in rfqs:
                 quotations = system.db.get_rfq_quotations(rfq['rfq_id'])
                 selected_quotes = [q for q in quotations if q.get('selected', False)]
+                selected_vendor_name = selected_quotes[0].get('vendor_name', 'Pending') if selected_quotes else 'Pending'
+
+                requested_quantity = rfq.get('requested_quantity', rfq['quantity'])
+                rfq_summary.append({
+                    'RFQ #': rfq['rfq_id'],
+                    'Item': rfq['item_name'],
+                    'Requested Quantity': requested_quantity,
+                    'Order Quantity': rfq['quantity'],
+                    'Selected Vendor': selected_vendor_name,
+                    'Vendors Contacted': rfq.get('vendors_contacted', 0),
+                    'Deadline': rfq.get('deadline', 'N/A'),
+                    'Status': rfq.get('status', 'Active')
+                })
+
                 if selected_quotes:
                     selected = selected_quotes[0]
                     chosen_summary.append({
@@ -249,10 +274,12 @@ def main():
                         'Delivery Days': selected.get('delivery_days', 'N/A')
                     })
 
+            if rfq_summary:
+                st.dataframe(rfq_summary, use_container_width=True)
             if chosen_summary:
                 st.subheader("Chosen Vendor Summary")
                 st.dataframe(chosen_summary, use_container_width=True)
-            else:
+            elif not rfq_summary:
                 st.info("No chosen vendors yet. Select quotes by receiving quotations or simulating vendor responses.")
 
             # Create tabs for each RFQ
@@ -260,13 +287,20 @@ def main():
 
             for i, (tab, rfq) in enumerate(zip(rfq_tabs, rfqs[:5])):
                 with tab:
-                    col1, col2, col3 = st.columns(3)
+                    col1, col2, col3, col4 = st.columns(4)
+                    requested_quantity = rfq.get('requested_quantity', rfq['quantity'])
                     col1.metric("Item", rfq['item_name'])
-                    col2.metric("Quantity", rfq['quantity'])
+                    col2.metric("Requested Quantity", requested_quantity)
                     col3.metric("Deadline", rfq.get('deadline', 'N/A'))
 
                     # Get quotations for this RFQ
                     quotations = system.db.get_rfq_quotations(rfq['rfq_id'])
+                    selected_quotes = [q for q in quotations if q.get('selected', False)]
+                    if selected_quotes:
+                        selected = selected_quotes[0]
+                        col4.metric("Selected Vendor", selected.get('vendor_name', 'Pending'))
+                    else:
+                        col4.metric("Selected Vendor", "Pending")
 
                     if st.button(f"Simulate quotes from all vendors for RFQ #{rfq['rfq_id']}", key=f"sim_all_{rfq['rfq_id']}"):
                         simulate_all_vendor_quotes(system, rfq)
@@ -339,6 +373,7 @@ def main():
 
                             with col2:
                                 st.markdown("**Preview Email Response:**")
+                                requested_quantity = rfq.get('requested_quantity', rfq['quantity'])
                                 preview_email = f"""
 Subject: Quotation for RFQ#{rfq['rfq_id']} - {rfq['item_name']}
 
@@ -349,7 +384,7 @@ Thank you for the opportunity to quote on {rfq['item_name']}.
 Our quotation:
 - Unit Price: ${demo_price:.2f}
 - Delivery Time: {demo_delivery} days
-- Quantity: {rfq['quantity']} units
+- Quantity: {requested_quantity} units
 
 We look forward to your business.
 
@@ -400,7 +435,8 @@ Procurement Manager
                         st.json({
                             'RFQ ID': rfq['rfq_id'],
                             'Item': rfq['item_name'],
-                            'Quantity': rfq['quantity'],
+                            'Requested Quantity': rfq.get('requested_quantity', rfq['quantity']),
+                            'Order Quantity': rfq['quantity'],
                             'Specifications': rfq.get('specifications', 'N/A'),
                             'Created': rfq.get('created_at', 'N/A'),
                             'Deadline': rfq.get('deadline', 'N/A'),

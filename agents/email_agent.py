@@ -147,6 +147,7 @@ class EmailAgent:
             rfq_id = self.db.create_rfq(
                 item_name=item['name'],
                 quantity=item['quantity'],
+                requested_quantity=item['quantity'],
                 specifications=item.get('specifications', ''),
                 deadline=datetime.now()
             )
